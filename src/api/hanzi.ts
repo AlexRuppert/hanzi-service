@@ -15,7 +15,7 @@ const characterModel = vmodel({
     default: 'a',
   },
 })
-export default Server.newController('/' + Server.getFileName(__filename), router => {
+export default Server.newController('/hanzi', router => {
   //configure router for incoming requests, see koa-router documentation
   router.get('/characters/:character', validate(characterModel), async ctx => {
     const decomposition = hanzi.decomposeMany(ctx.params.character, 2)
