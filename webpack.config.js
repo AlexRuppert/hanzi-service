@@ -33,7 +33,7 @@ module.exports = {
     ],
   }),
   plugins: [
-    new webpack.BannerPlugin({
+   /* new webpack.BannerPlugin({
       raw: true,
       entryOnly: false,
       banner: `require('${
@@ -44,7 +44,7 @@ module.exports = {
           : // It's not under the project, it's linked via lerna.
             require.resolve('source-map-support/register')
       }')`,
-    }),
+    }),*/
     new friendlyErrorsWebpackPlugin({
       clearConsole: process.env.NODE_ENV === 'development',
     }),
