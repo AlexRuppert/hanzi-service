@@ -3,7 +3,7 @@ import { validate, vmodel } from '../server/validate'
 import hanzi from 'hanzi'
 import pinyinConvert from 'pinyin-tone-convert'
 
-hanzi.start()
+hanzi.start('s', false, false)
 const characterModel = vmodel({
   character: {
     type: value => {
@@ -22,7 +22,11 @@ export default Server.newController('/hanzi', router => {
     for (const char in decomposition) {
       const data = decomposition[char]
       data.components = data.components.map(component => {
-        const pinyin = hanzi.getPinyin(component)[0] || ''
+        let pinyin = ''
+        if (component && component[0] !== 'N') {
+          pinyin = hanzi.getPinyin(component)[0]
+        }
+
         return {
           radical: component,
           pinyin,
@@ -35,15 +39,6 @@ export default Server.newController('/hanzi', router => {
           pinyin: definition.pinyin,
           pinyin2: pinyinConvert(definition.pinyin),
           definitions: definition.definition.split('/'),
-        }
-      })
-      //data.position = hanzi.getCharacterFrequency(char).number
-      data.examples = hanzi.getExamples(char)[0].map(example => {
-        return {
-          example: example.simplified,
-          pinyin: example.pinyin,
-          pinyin2: pinyinConvert(example.pinyin),
-          definitions: example.definition.split('/'),
         }
       })
     }
