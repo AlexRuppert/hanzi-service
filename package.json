@@ -43,6 +43,7 @@
     "koa-pino-logger": "^2.1.3",
     "koa-rest-cache": "^1.1.0",
     "koa-router": "^7.4.0",
+    "koa-static-server": "^1.3.4",
     "pino": "^4.17.3",
     "pinyin-tone-convert": "^0.0.2",
     "valify": "^4.5.0"
