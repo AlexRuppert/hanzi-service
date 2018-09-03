@@ -3,7 +3,7 @@ import mount from 'koa-mount'
 import Router from 'koa-router'
 import pino from 'pino'
 import middlewares from './middlewares'
-import https from 'https'
+import http2 from 'http2'
 import fs from 'fs'
 /**
  * A simple controller
@@ -38,12 +38,18 @@ export default class Server {
     middlewares.concat(mounts.map(m => mount(m.name, m.app))).forEach(m => this._server.use(m))
     //start server
     //this._server.listen(port)
-    const options = {
-      key: fs.readFileSync('certificates/domain-key.txt'),
-      cert: fs.readFileSync('certificates/domain-crt.txt')
-    }
+    const options =
+      process.env.NODE_ENV === 'development'
+        ? {
+            key: fs.readFileSync('local certificates/localhost.key'),
+            cert: fs.readFileSync('local certificates/localhost.cert'),
+          }
+        : {
+            key: fs.readFileSync('certificates/domain-key.txt'),
+            cert: fs.readFileSync('certificates/domain-crt.txt'),
+          }
 
-    https.createServer(options, this._server.callback()).listen(443)
+    http2.createSecureServer(options, this._server.callback()).listen(port)
     Server.logger.info(`Server running on port ${port}`)
   }
   /**

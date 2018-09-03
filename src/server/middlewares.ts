@@ -1,5 +1,5 @@
 import cors from '@koa/cors'
-import compress from 'koa-compress'
+import compress from 'kompression'
 import conditional from 'koa-conditional-get'
 import etag from 'koa-etag'
 import logger from 'koa-morgan'
@@ -9,9 +9,14 @@ import path from 'path'
 //configure all middlewares here
 console.log(path.resolve(__dirname + '../../../public'))
 export default [
+  //logger('dev'),
   cors(),
-  logger('combined'),
-  compress({ threshold: 256 }),
+  compress({
+    filter: function(content_type) {
+      return /json/i.test(content_type)
+    },
+    threshold: 256,
+  }),
   conditional(),
   etag(),
   cache(),
